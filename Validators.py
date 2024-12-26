@@ -7,8 +7,6 @@ def get_valid_date():
         month = user_date[1]
         day = user_date[2]
 
-
-
         if len(user_date) != 3:
             print("Invalid input")
         elif (
@@ -30,8 +28,9 @@ def get_valid_date():
             print("Invalid input")
 
         #Finish Reconversion and Formatting here!
-        final_list = list(map(int, converted_list))
-        return final_list
+        str_list = list(map(str, converted_list))
+        final_date = "-".join(str_list)
+        return final_date
 
 
 def get_transaction_type():

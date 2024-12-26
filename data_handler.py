@@ -24,6 +24,7 @@ def data_processor(functions):
 
 
 
+
 #Print and format CSV Data
 def data_output():
     with open("transactions.csv", 'r') as file:

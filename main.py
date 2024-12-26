@@ -17,7 +17,7 @@ def main():
 
     #Create menu
     while True:
-        print("Menu Options")
+        print("\nMenu Options")
         print("1. -Add Transaction")
         print("2. -View All Transactions")
         print("3. -Filter And View Transactions")
@@ -37,6 +37,9 @@ def main():
             data.data_select()
         elif user == "4":
             sys.exit(0)
+
+        input("\nPress Enter to return to the menu.")
+
 
 
 if __name__ == "__main__":
