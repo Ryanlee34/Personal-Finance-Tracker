@@ -26,11 +26,19 @@ def get_valid_date():
             print("Invalid input")
         elif not (1<= converted_list[2] <= 31):
             print("Invalid input")
-
-        # Format and return the valid date
-        str_list = list(map(str, converted_list))
-        final_date = "-".join(str_list)
-        return final_date
+        elif converted_list[1] in [4,6,9,11] and converted_list[2] > 30: # Handle months with 30 days
+            print("Invalid input, this month only had 30 days")
+        elif converted_list[1] == 2:
+            if (converted_list[0] % 4 == 0 and converted_list[0] % 100 != 0) or (converted_list[0] % 400 == 0): # Leap year check
+                if converted_list[2] > 29:
+                    print("Invalid input, February has at most 29 days in a leap year")
+            elif converted_list[2] > 28: # Handle February
+                print("Invalid input, February has at most 28 days")
+        else:
+            # Format and return the valid date
+            str_list = list(map(str, converted_list))
+            final_date = "-".join(str_list)
+            return final_date
 
 # Prompts the user to specify if the transaction is income or expense
 def get_transaction_type():
