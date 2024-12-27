@@ -3,29 +3,28 @@ from csv import DictReader
 
 fieldnames= ["Date", "Transaction Type", "Category", "Income Type", "Amount", "Details"]
 
-#Write Data to CSV
+# Write transaction data to CSV file
 def data_processor(functions):
-    #Store Results
+    # Store Results from user input
     results = {}
-    #Iterate Through Functions
+    # Iterate Through Functions
     for key, func in functions.items():
         results[key] = func()
 
     with open("transactions.csv", 'a+', newline="") as file:
-        #Set pointer to start
-        file.seek(0)
+        file.seek(0) # Set pointer to start to check for empty file
         reader = csv.reader(file)
         writer = csv.DictWriter(file, fieldnames=fieldnames)
 
-        if not any(row for row in reader):
+        if not any(row for row in reader):  # Write header if file is empty
             writer.writeheader()
 
-        writer.writerow(results)
+        writer.writerow(results)    # Append the new transaction
 
 
 
 
-#Print and format CSV Data
+# Reads and prints transaction data from the CSV file in a formatted manner
 def data_output():
     with open("transactions.csv", 'r') as file:
          reader = csv.DictReader(file)
@@ -37,7 +36,7 @@ def data_output():
 
 
 
-#Filter Transactions
+# Filter Transactions based on user-specified type and category
 def data_select():
     try:
         with open("transactions.csv", 'r') as file:
