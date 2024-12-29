@@ -1,6 +1,7 @@
 import sys
 import data_handler as data
 import Validators as Valid
+import visualizations as vis
 
 #Main function to handle user interactions and the menu
 def main():
@@ -21,11 +22,13 @@ def main():
         print("1. -Add Transaction")
         print("2. -View All Transactions")
         print("3. -Filter And View Transactions")
-        print("4. -Exit Program")
+        print("4. -Income or Expense Pie Chart")
+        print("5. -Line Chart")
+        print("6. -Exit Program")
         user = input("Please Enter the number of Desired option: ")
 
         #Validate menu input
-        if user not in ["1","2","3","4"]:
+        if user not in ["1","2","3","4","5","6"]:
             print("Invalid Input, Please Try again")
             continue
 
@@ -38,8 +41,20 @@ def main():
         # Option to filter and view transactions
         elif user == "3":
             data.data_select()
-        # Exit the program
+        # Option to use Pie Chart
         elif user == "4":
+            e_or_i = input("1. -Expense Chart \n2. -Income Chart ").strip()
+            if e_or_i == "1":
+                vis.pie_chart(e_or_i)
+            elif e_or_i == "2":
+                vis.pie_chart(e_or_i)
+            else:
+                print("Invalid input. Please try again.")
+        # Option to use Line Chart
+        elif user == "5":
+            vis.line_chart()
+        # Exit the program
+        elif user == "6":
             sys.exit(0)
 
         input("\nPress Enter to return to the menu.")
