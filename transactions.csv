@@ -1,2 +1,21 @@
 Date,Transaction Type,Category,Income Type,Amount,Details
 1999-7-22,Income,Other,Other,15.0,Na
+2024-01-05,Expense,Groceries,Expense,75.50,Weekly grocery shopping
+2024-01-10,Income,Other,Income,1500.00,Bi-weekly salary deposit
+2024-01-12,Expense,Bills,Expense,200.00,Electricity bill for January
+2024-01-15,Expense,Entertainment,Expense,45.00,Movie night with friends
+2024-01-18,Income,Other,Income,100.00,Tax refund
+2024-01-20,Expense,Other,Expense,120.00,Gift purchase
+2024-01-25,Income,Other,Income,50.00,Quarterly stock dividend
+2024-01-28,Expense,Groceries,Expense,80.75,Grocery shopping
+2024-01-30,Expense,Bills,Expense,75.00,Internet bill for January
+2019-05-12,Expense,Travel,Expense,250.00,Weekend trip expenses
+2017-11-23,Income,Other,Income,200.00,Thanksgiving bonus
+2020-03-15,Expense,Healthcare,Expense,300.00,Doctor visit and medication
+2018-07-04,Income,Other,Income,500.00,Holiday bonus
+2016-09-22,Expense,Education,Expense,1000.00,Course fees
+2021-12-31,Expense,Entertainment,Expense,150.00,New Year's Eve party
+2015-02-14,Income,Other,Income,100.00,Valentine's Day gift
+2013-08-20,Expense,Groceries,Expense,60.00,Weekly grocery shopping
+2010-10-10,Income,Other,Income,1200.00,Project completion bonus
+2008-01-01,Expense,Other,Expense,75.00,New Year's celebration
