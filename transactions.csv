@@ -1,2 +1,38 @@
 Date,Transaction Type,Category,Income Type,Amount,Details
-1999-7-22,Income,Other,Other,15.0,Na
+2024-01-22,Income,Other,Paycheck,15.0,Na
+2024-01-05,Expense,Groceries,Expense,75.50,Weekly grocery shopping
+2024-01-10,Expense,Bills,Expense,150.00,Electricity bill for January
+2024-01-15,Expense,Entertainment,Expense,45.00,Cinema outing
+2024-02-10,Income,Other,Dividends,1500.00,Bi-weekly salary deposit
+2024-02-14,Expense,Bills,Expense,200.00,Water bill
+2024-02-22,Expense,Groceries,Expense,85.00,Weekly grocery shopping
+2024-03-12,Expense,Bills,Expense,200.00,Electricity bill
+2024-03-20,Expense,Healthcare,Expense,120.00,Doctor visit
+2024-03-31,Expense,Entertainment,Expense,150.00,New Year's Eve party
+2024-04-15,Expense,Entertainment,Expense,45.00,Movie night with friends
+2024-04-10,Expense,Bills,Expense,250.00,Internet bill
+2024-04-20,Income,Other,Refund,100.00,Tax refund
+2024-05-18,Income,Other,Refund,100.00,Tax refund
+2024-05-10,Expense,Bills,Expense,300.00,Phone bill
+2024-05-20,Expense,Groceries,Expense,60.00,Weekly grocery shopping
+2024-06-20,Expense,Other,Expense,120.00,Gift purchase
+2024-06-15,Expense,Bills,Expense,180.00,Electricity bill
+2024-06-25,Income,Other,Paycheck,500.00,Salary deposit
+2024-07-25,Income,Other,Dividends,50.00,Quarterly stock dividend
+2024-07-10,Expense,Bills,Expense,150.00,Water bill
+2024-07-28,Expense,Travel,Expense,250.00,Weekend trip expenses
+2024-08-28,Expense,Groceries,Expense,80.75,Grocery shopping
+2024-08-10,Expense,Bills,Expense,120.00,Gas bill
+2024-08-22,Income,Other,Paycheck,15.0,Na
+2024-09-30,Expense,Bills,Expense,75.00,Internet bill for January
+2024-09-15,Expense,Healthcare,Expense,300.00,Medication purchase
+2024-09-25,Income,Other,Refund,200.00,Insurance reimbursement
+2024-10-12,Expense,Travel,Expense,250.00,Weekend trip expenses
+2024-10-10,Expense,Bills,Expense,150.00,Phone bill
+2024-10-20,Expense,Groceries,Expense,60.00,Weekly grocery shopping
+2024-11-23,Income,Other,Refund,200.00,Thanksgiving bonus
+2024-11-10,Expense,Bills,Expense,200.00,Electricity bill
+2024-11-15,Expense,Groceries,Expense,75.00,Weekly grocery shopping
+2024-12-15,Expense,Healthcare,Expense,300.00,Doctor visit and medication
+2024-12-10,Expense,Bills,Expense,180.00,Internet bill
+2024-12-20,Income,Other,Paycheck,1000.00,Year-end bonus
