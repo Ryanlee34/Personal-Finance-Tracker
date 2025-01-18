@@ -3,26 +3,27 @@ import pandas as pd
 import csv
 
 
-# Pie chart for expenses by proportion
+# Pie chart for expenses or income distribution by proportion
 def pie_chart(typ):
     # Open and read the CSV file
     with open('transactions.csv', 'r') as file:
         reader = csv.DictReader(file)
         data_list = list(reader)  # Convert the reader to a list of dictionaries
 
+    # Convert the list of dictionaries into a pandas DataFrame
     df = pd.DataFrame(data_list)
 
-    # Change amount to float or int
+    # Convert the 'Amount' column to numeric, coercing errors to NaN
     df['Amount'] = pd.to_numeric(df['Amount'], errors= 'coerce')
 
-    # Select users desired chart
+    # Determine the type of chart to generate based on user input
     while True:
-        if typ == '1':
+        if typ == '1': # Generate pie chart for expenses
             expense_df = df[df['Transaction Type'] == 'Expense']
             plt.title("Expense Distribution by Category")
             grouped = expense_df.groupby('Category')['Amount'].sum()
             break
-        else:
+        else:   # Generate pie chart for income
             income_df = df[df['Transaction Type'] == 'Income']
             plt.title("Income Distribution by Category")
             grouped = income_df.groupby('Income Type')['Amount'].sum()
@@ -31,12 +32,12 @@ def pie_chart(typ):
     # Create PieChart
     plt.pie(
         grouped,
-        labels = grouped.index,
-        autopct='%1.1f%%',
-        startangle=140,
-        shadow=True
+        labels = grouped.index, # Labels for each slice
+        autopct='%1.1f%%', # Display percentages
+        startangle=140, # Rotate the chart for better visibility
+        shadow=True # Add shadow for visual effect
     )
-    plt.show()
+    plt.show()  # Display the chart
 
 
 # Line chart for Income vs Expenses over time
@@ -46,6 +47,7 @@ def line_chart():
         data_list = list(reader)  # Convert the reader to a list of dictionaries
         abbreviated_months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
+        # Convert the list of dictionaries into a pandas DataFrame
         df = pd.DataFrame(data_list)
         df['Amount'] = pd.to_numeric(df['Amount'], errors='coerce')
 
@@ -83,7 +85,7 @@ def line_chart():
         plt.legend()
         plt.grid(True)
 
-        plt.show()
+        plt.show() # Display the chart
 
 
 
