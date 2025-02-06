@@ -18,32 +18,31 @@ class FinanceManager:
         print("\nAdding a new transaction:")
         date = Valid.get_valid_date()
         transaction_type = Valid.get_transaction_type()
-        category = Valid.get_category()
+        category = Valid.get_category() if transaction_type == "Expense" else None
         income_type = Valid.get_income_type() if transaction_type == "Income" else None
         amount = Valid.get_amount()
         details = Valid.get_description()
 
         transaction = Transaction(date, transaction_type, category, income_type, amount, details)
         self.db.add_transaction(transaction)
-        print("Transaction added successfully!")
+        print("\nTransaction successfully added!")
 
     def view_transactions(self):
-        """
-        Retrieve and display all transactions.
-        """
-        transactions = self.db.get_all_transactions()
+        """Fetch and display all transactions from the database."""
+        transactions = self.db.get_all_transactions()  # Fetch fresh data
+
         if not transactions:
-            print("No transactions found.")
+            print("\nNo transactions found.")
             return
 
         print("\n=== All Transactions ===")
-        for t in transactions:
-            print(t)
+        for txn in transactions:
+            print(f"ID: {txn.id} | Date: {txn.date} | Type: {txn.transaction_type} | "
+                  f"Category: {txn.category if txn.transaction_type == 'Expense' else txn.income_type} | "
+                  f"Amount: ${txn.amount:.2f} | Details: {txn.details}")
 
     def view_transactions_by_type(self):
-        """
-        Retrieve and display transactions filtered by type (Income/Expense).
-        """
+        """Retrieve and display transactions filtered by type (Income/Expense)."""
         transaction_type = Valid.get_transaction_type()
         transactions = self.db.get_transactions_by_type(transaction_type)
 
@@ -52,6 +51,7 @@ class FinanceManager:
             return
 
         print(f"\n=== {transaction_type} Transactions ===")
-        for t in transactions:
-            print(t)
-
+        for txn in transactions:
+            print(f"ID: {txn.id} | Date: {txn.date} | Type: {txn.transaction_type} | "
+                  f"Category: {txn.category if txn.transaction_type == 'Expense' else txn.income_type} | "
+                  f"Amount: ${txn.amount:.2f} | Details: {txn.details}")

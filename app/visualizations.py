@@ -1,46 +1,72 @@
 import matplotlib.pyplot as plt
 import pandas as pd
-import psycopg2
+from sqlalchemy import create_engine
 import os
 from dotenv import load_dotenv
 
+# Load environment variables
 load_dotenv()
 
-def get_database_connection():
-    """Connect to the database and return a connection object."""
-    return psycopg2.connect(
-        dbname=os.getenv("DB_NAME"),
-        user=os.getenv("DB_USER"),
-        password=os.getenv("DB_PASSWORD"),
-        host=os.getenv("DB_HOST"),
-        port=os.getenv("DB_PORT")
-    )
+def get_database_engine():
+    """Create a SQLAlchemy engine for database connection."""
+    db_url = f"postgresql+psycopg2://{os.getenv('DB_USER')}:{os.getenv('DB_PASSWORD')}@{os.getenv('DB_HOST')}:{os.getenv('DB_PORT')}/{os.getenv('DB_NAME')}"
+
+    try:
+        engine = create_engine(db_url)
+        return engine
+    except Exception as e:
+        print("Error creating database engine:", e)
+        return None
 
 def pie_chart(transaction_type):
     """Generate a pie chart for income/expense distribution."""
-    conn = get_database_connection()
-    df = pd.read_sql(f"SELECT category, SUM(amount) as total FROM transactions WHERE transaction_type='{transaction_type}' GROUP BY category", conn)
-    conn.close()
+    engine = get_database_engine()
+    if not engine:
+        print("Cannot generate chart. Database connection failed.")
+        return
+
+    # Determine the correct column to group by
+    column_name = "category" if transaction_type == "Expense" else "income_type"
+
+    query = f"""
+        SELECT {column_name} AS label, SUM(amount) as total 
+        FROM transactions 
+        WHERE transaction_type = %(transaction_type)s
+        GROUP BY {column_name}
+    """
+
+    with engine.connect() as connection:
+        df = pd.read_sql_query(query, connection, params={"transaction_type": transaction_type})
 
     if df.empty:
         print(f"No {transaction_type.lower()} data available.")
         return
 
+    # Debugging: Print retrieved data
+    print("\nDEBUG: Data Retrieved for Pie Chart")
+    print(df)
+
     plt.figure(figsize=(8, 6))
-    plt.pie(df['total'], labels=df['category'], autopct='%1.1f%%', startangle=140, shadow=True)
-    plt.title(f"{transaction_type} Distribution by Category")
+    plt.pie(df['total'], labels=df['label'], autopct='%1.1f%%', startangle=140, shadow=True)
+    plt.title(f"{transaction_type} Distribution by {'Category' if transaction_type == 'Expense' else 'Income Type'}")
     plt.show()
 
 def line_chart():
-    """Generate a line chart of income vs expenses over time."""
-    conn = get_database_connection()
-    df = pd.read_sql("""
+    """Generate a line chart of income vs. expenses over time."""
+    engine = get_database_engine()
+    if not engine:
+        print("Cannot generate chart. Database connection failed.")
+        return
+
+    query = """
         SELECT date, transaction_type, SUM(amount) as total 
         FROM transactions 
         GROUP BY date, transaction_type 
         ORDER BY date
-    """, conn)
-    conn.close()
+    """
+
+    with engine.connect() as connection:
+        df = pd.read_sql_query(query, connection)
 
     if df.empty:
         print("No transaction data available.")
@@ -58,16 +84,6 @@ def line_chart():
     plt.legend()
     plt.xticks(rotation=45)
     plt.show()
-
-
-
-
-
-
-
-
-
-
 
 
 

@@ -1,109 +1,95 @@
-import psycopg2
+from sqlalchemy import create_engine, text
 import os
 from dotenv import load_dotenv
 
-# Load environment variables from .env
+# Load environment variables
 load_dotenv()
 
+def get_database_engine():
+    """Create a SQLAlchemy engine for database connection."""
+    db_url = f"postgresql+psycopg2://{os.getenv('DB_USER')}:{os.getenv('DB_PASSWORD')}@{os.getenv('DB_HOST')}:{os.getenv('DB_PORT')}/{os.getenv('DB_NAME')}"
+
+    try:
+        engine = create_engine(db_url)
+        return engine
+    except Exception as e:
+        print("Error creating database engine:", e)
+        return None
 
 class DatabaseManager:
-    """
-    Handles database interactions for storing and retrieving transactions.
-    """
+    """Handles database interactions for storing and retrieving transactions."""
 
     def __init__(self):
-        """Initialize the database connection using credentials from .env."""
-        try:
-            self.conn = psycopg2.connect(
-                dbname=os.getenv("DB_NAME"),
-                user=os.getenv("DB_USER"),
-                password=os.getenv("DB_PASSWORD"),
-                host=os.getenv("DB_HOST"),
-                port=os.getenv("DB_PORT")
-            )
-            self.cursor = self.conn.cursor()
+        """Initialize the database connection."""
+        self.engine = get_database_engine()
+        if self.engine:
             print("Database connection successful.")
-        except psycopg2.OperationalError as e:
-            print("Database connection error. Check your credentials.")
-            print(e)
-            self.conn = None
 
     def add_transaction(self, transaction):
-        """
-        Insert a new transaction into the database.
-
-        Args:
-            transaction (Transaction): The transaction object to be stored.
-        """
-        if not self.conn:
+        """Insert a new transaction into the database."""
+        if not self.engine:
             print("Cannot add transaction. Database is not connected.")
             return
 
-        query = """
-        INSERT INTO transactions (date, transaction_type, category, income_type, amount, details)
-        VALUES (%s, %s, %s, %s, %s, %s)
-        """
-        values = (transaction.date, transaction.transaction_type, transaction.category,
-                  transaction.income_type, transaction.amount, transaction.details)
+        query = text("""
+            INSERT INTO transactions (date, transaction_type, category, income_type, amount, details)
+            VALUES (:date, :transaction_type, :category, :income_type, :amount, :details)
+        """)
 
-        try:
-            with self.conn:
-                with self.conn.cursor() as cursor:
-                    cursor.execute(query, values)
-            print("Transaction added successfully.")
-        except psycopg2.Error as e:
-            print("Error inserting transaction:", e)
+        values = {
+            "date": transaction.date,
+            "transaction_type": transaction.transaction_type,
+            "category": transaction.category if transaction.transaction_type == "Expense" else None,
+            "income_type": transaction.income_type if transaction.transaction_type == "Income" else None,
+            "amount": transaction.amount,
+            "details": transaction.details
+        }
+
+        with self.engine.begin() as connection:
+            try:
+                connection.execute(query, values)
+                print("Transaction added successfully.")
+            except Exception as e:
+                print("Error inserting transaction:", e)
 
     def get_all_transactions(self):
-        """
-        Retrieve all transactions from the database.
-
-        Returns:
-            list: A list of transactions.
-        """
-        if not self.conn:
+        """Retrieve all transactions from the database."""
+        if not self.engine:
             print("Cannot retrieve transactions. Database is not connected.")
             return []
 
-        try:
-            with self.conn:
-                with self.conn.cursor() as cursor:
-                    cursor.execute("SELECT * FROM transactions ORDER BY date DESC")
-                    transactions = cursor.fetchall()
-            return transactions
-        except psycopg2.Error as e:
-            print("Error retrieving transactions:", e)
+        query = text("SELECT id, date, transaction_type, category, income_type, amount, details FROM transactions ORDER BY date DESC")
+
+        with self.engine.connect() as connection:
+            result = connection.execute(query)
+            transactions = result.fetchall()
+
+        if not transactions:
+            print("\nNo transactions found.")
             return []
+
+        return transactions
 
     def get_transactions_by_type(self, transaction_type):
-        """
-        Retrieve transactions of a specific type (Income/Expense).
-
-        Args:
-            transaction_type (str): The type of transaction to filter by.
-
-        Returns:
-            list: A list of filtered transactions.
-        """
-        if not self.conn:
+        """Retrieve transactions filtered by type (Income/Expense)."""
+        if not self.engine:
             print("Cannot retrieve transactions. Database is not connected.")
             return []
 
-        try:
-            with self.conn:
-                with self.conn.cursor() as cursor:
-                    cursor.execute(
-                        "SELECT * FROM transactions WHERE transaction_type = %s ORDER BY date DESC",
-                        (transaction_type,)
-                    )
-                    transactions = cursor.fetchall()
-            return transactions
-        except psycopg2.Error as e:
-            print("Error retrieving filtered transactions:", e)
+        query = text("""
+            SELECT id, date, transaction_type, category, income_type, amount, details 
+            FROM transactions 
+            WHERE transaction_type = :transaction_type 
+            ORDER BY date DESC
+        """)
+
+        with self.engine.connect() as connection:
+            result = connection.execute(query, {"transaction_type": transaction_type})
+            transactions = result.fetchall()
+
+        if not transactions:
+            print(f"\nNo {transaction_type.lower()} transactions found.")
             return []
 
-    def close_connection(self):
-        """Close the database connection."""
-        if self.conn:
-            self
+        return transactions
 
